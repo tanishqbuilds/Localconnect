@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Filter, Users, MapPin, ClipboardList } from 'lucide-react'
+import { Filter, Users, MapPin, ClipboardList, Clock, ShieldAlert } from 'lucide-react'
 
 export default async function OfficerDashboard({
   searchParams,
@@ -14,6 +14,41 @@ export default async function OfficerDashboard({
   if (!user) redirect('/login')
 
   const { data: officer } = await supabase.from('officers').select('*').eq('user_id', user.id).single()
+
+  // If officer is not approved, show pending approval message
+  if (officer && !officer.is_approved) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-100 mb-6">
+            <Clock className="w-10 h-10 text-amber-600" />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900 mb-3">Registration Under Review</h1>
+          <p className="text-slate-500 leading-relaxed max-w-md mx-auto mb-6">
+            Your officer registration is currently being reviewed by an administrator.
+            You will be able to access the Officer Command Center once your account has been approved.
+          </p>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+            <div className="flex items-start gap-3 text-left">
+              <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-amber-800">Pending Admin Approval</p>
+                <p className="text-xs text-amber-600 mt-1">
+                  Your submitted documents and profile details are being verified. This usually takes 1-2 business days.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-2 text-sm text-slate-400">
+            <p><strong className="text-slate-600">Name:</strong> {user.user_metadata?.name}</p>
+            <p><strong className="text-slate-600">Department:</strong> {officer.department}</p>
+            <p><strong className="text-slate-600">Designation:</strong> {officer.designation}</p>
+            <p><strong className="text-slate-600">Applied on:</strong> {new Date(officer.created_at).toLocaleDateString()}</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   let query = supabase
     .from('complaints')

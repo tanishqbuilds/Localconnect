@@ -37,12 +37,16 @@ export async function signup(formData: FormData) {
   const phone = formData.get('phone') as string
   const department = formData.get('department') as string
   const designation = formData.get('designation') as string
+  const id_document_url = formData.get('id_document_url') as string
+  const additional_document_url = formData.get('additional_document_url') as string
 
   // Put extra metadata into raw_user_meta_data so our Supabase trigger creates the record accurately
   const meta: any = { name, role, phone }
   if (role === 'officer') {
     meta.department = department
     meta.designation = designation
+    meta.id_document_url = id_document_url || ''
+    meta.additional_document_url = additional_document_url || ''
   }
 
   let origin = '';
