@@ -5,7 +5,7 @@ export default async function Navbar() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const role = user?.user_metadata?.role || null;
+  const role = user?.user_metadata?.role || 'citizen';
 
   return (
     <NavbarClient user={user} role={role} />

@@ -30,68 +30,76 @@ export default async function OfficerDashboard({
 
   const { data: complaints, error } = await query
 
+  if (error) {
+    console.error('Officer dashboard complaints query error:', error.message)
+  }
+  if (!officer) {
+    console.error('No officer record found for user:', user.id, '- complaints will not be visible due to RLS')
+  }
+
   const total = complaints?.length || 0
   const pending = complaints?.filter(c => c.status === 'Pending').length || 0
   const inProgress = complaints?.filter(c => c.status === 'In Progress').length || 0
-    
+
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="sm:flex sm:items-center sm:justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold leading-7 text-slate-900 sm:truncate sm:text-3xl sm:tracking-tight">
-             Officer Command Center
+            Officer Command Center
           </h1>
           <p className="mt-1 text-sm text-slate-500">
             Welcome, {user.user_metadata?.name || 'Officer'}. Department: {officer?.department || 'General'}
           </p>
         </div>
         <div className="mt-4 sm:ml-4 sm:mt-0 flex gap-2">
-           <Link href="/dashboard/officer" className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-             Clear Filters
-           </Link>
-           <div className="relative inline-block text-left group">
-             <button className="inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500">
-               <Filter className="-ml-0.5 mr-1.5 h-4 w-4" aria-hidden="true" />
-               Filter Status
-             </button>
-             <div className="hidden group-hover:block absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="py-1">
-                   <Link href="?status=Pending" className="text-slate-700 block px-4 py-2 text-sm hover:bg-slate-100">Pending</Link>
-                   <Link href="?status=In Progress" className="text-slate-700 block px-4 py-2 text-sm hover:bg-slate-100">In Progress</Link>
-                   <Link href="?status=Resolved" className="text-slate-700 block px-4 py-2 text-sm hover:bg-slate-100">Resolved</Link>
-                </div>
-             </div>
-           </div>
+          <Link href="/dashboard/officer" className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            Clear Filters
+          </Link>
+          <div className="relative inline-block text-left group">
+            <button className="inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500">
+              <Filter className="-ml-0.5 mr-1.5 h-4 w-4" aria-hidden="true" />
+              Filter Status
+            </button>
+            <div className="hidden group-hover:block absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div className="py-1">
+                <Link href="?status=Pending" className="text-slate-700 block px-4 py-2 text-sm hover:bg-slate-100">Pending</Link>
+                <Link href="?status=In Progress" className="text-slate-700 block px-4 py-2 text-sm hover:bg-slate-100">In Progress</Link>
+                <Link href="?status=Resolved" className="text-slate-700 block px-4 py-2 text-sm hover:bg-slate-100">Resolved</Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
         <div className="rounded-lg bg-white p-6 shadow-sm border border-slate-200 flex items-center gap-4">
-           <div className="p-3 bg-indigo-50 text-indigo-600 rounded-lg">
-             <ClipboardList className="w-6 h-6" />
-           </div>
-           <div>
-             <p className="text-sm font-medium text-slate-500">Total Active Views</p>
-             <p className="text-2xl font-semibold text-slate-900">{total}</p>
-           </div>
+          <div className="p-3 bg-indigo-50 text-indigo-600 rounded-lg">
+            <ClipboardList className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-slate-500">Total Active Views</p>
+            <p className="text-2xl font-semibold text-slate-900">{total}</p>
+          </div>
         </div>
         <div className="rounded-lg bg-white p-6 shadow-sm border border-slate-200 flex items-center gap-4">
-           <div className="p-3 bg-yellow-50 text-yellow-600 rounded-lg">
-             <Users className="w-6 h-6" />
-           </div>
-           <div>
-             <p className="text-sm font-medium text-slate-500">Pending Actions</p>
-             <p className="text-2xl font-semibold text-slate-900">{pending}</p>
-           </div>
+          <div className="p-3 bg-yellow-50 text-yellow-600 rounded-lg">
+            <Users className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-slate-500">Pending Actions</p>
+            <p className="text-2xl font-semibold text-slate-900">{pending}</p>
+          </div>
         </div>
         <div className="rounded-lg bg-white p-6 shadow-sm border border-slate-200 flex items-center gap-4">
-           <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
-             <MapPin className="w-6 h-6" />
-           </div>
-           <div>
-             <p className="text-sm font-medium text-slate-500">In Progress Works</p>
-             <p className="text-2xl font-semibold text-slate-900">{inProgress}</p>
-           </div>
+          <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
+            <MapPin className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-slate-500">In Progress Works</p>
+            <p className="text-2xl font-semibold text-slate-900">{inProgress}</p>
+          </div>
         </div>
       </div>
 
@@ -113,28 +121,26 @@ export default async function OfficerDashboard({
             {complaints?.map((comp) => (
               <tr key={comp.complaint_id} className="hover:bg-slate-50 transition-colors">
                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">
-                  {comp.complaint_id.slice(0,8).toUpperCase()}
+                  {comp.complaint_id.slice(0, 8).toUpperCase()}
                   <div className="text-xs text-slate-500 font-normal">{new Date(comp.created_at).toLocaleDateString()}</div>
                 </td>
                 <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500 capitalize">{comp.category?.category_name}</td>
                 <td className="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
-                  <div className="flex items-center gap-1"><MapPin className="w-3 h-3"/> {comp.location?.area}</div>
+                  <div className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {comp.location?.area}</div>
                 </td>
                 <td className="whitespace-nowrap px-3 py-4 text-sm">
-                  <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${
-                     comp.status === 'Resolved' ? 'bg-green-50 text-green-700 ring-green-600/20' :
-                     comp.status === 'In Progress' ? 'bg-blue-50 text-blue-700 ring-blue-600/20' :
-                     'bg-yellow-50 text-yellow-800 ring-yellow-600/20'
-                  }`}>
+                  <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${comp.status === 'Resolved' ? 'bg-green-50 text-green-700 ring-green-600/20' :
+                      comp.status === 'In Progress' ? 'bg-blue-50 text-blue-700 ring-blue-600/20' :
+                        'bg-yellow-50 text-yellow-800 ring-yellow-600/20'
+                    }`}>
                     {comp.status}
                   </span>
                 </td>
                 <td className="whitespace-nowrap px-3 py-4 text-sm">
-                  <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${
-                     comp.priority === 'High' ? 'bg-red-50 text-red-700 ring-red-600/10' :
-                     comp.priority === 'Medium' ? 'bg-orange-50 text-orange-700 ring-orange-600/10' :
-                     'bg-slate-50 text-slate-600 ring-slate-500/10'
-                  }`}>
+                  <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset ${comp.priority === 'High' ? 'bg-red-50 text-red-700 ring-red-600/10' :
+                      comp.priority === 'Medium' ? 'bg-orange-50 text-orange-700 ring-orange-600/10' :
+                        'bg-slate-50 text-slate-600 ring-slate-500/10'
+                    }`}>
                     {comp.priority}
                   </span>
                 </td>
