@@ -17,19 +17,47 @@ export async function createComplaint(formData: FormData) {
   const priority = formData.get('priority') as string || 'Medium'
   const area = formData.get('area') as string
   const city = formData.get('city') as string
+  const state = formData.get('state') as string || 'Maharashtra'
   const pincode = formData.get('pincode') as string
+  const lat = parseFloat(formData.get('lat') as string) || null
+  const lng = parseFloat(formData.get('lng') as string) || null
+  const tagged_officers_raw = formData.get('tagged_officers') as string
 
-  // Handle location: check if exists or insert
-  // Since we don't have a perfect deduplication, we just insert a new location for simplicity
-  const { data: locationData, error: locError } = await supabase
-    .from('locations')
-    .insert([{ area, city, pincode }])
-    .select('location_id')
-    .single()
-
-  if (locError) {
-    return { error: locError.message }
+  // Parse tagged officers
+  let tagged_officers: string[] = []
+  try {
+    tagged_officers = JSON.parse(tagged_officers_raw || '[]')
+  } catch {
+    tagged_officers = []
   }
+
+  // Upsert location: check if exists or insert
+  let locationId: string | null = null
+  const { data: existingLoc } = await supabase
+    .from('locations')
+    .select('location_id')
+    .eq('area', area)
+    .eq('city', city)
+    .eq('pincode', pincode)
+    .maybeSingle()
+
+  if (existingLoc) {
+    locationId = existingLoc.location_id
+  } else {
+    const locInsert: Record<string, unknown> = { area, city, state, pincode }
+    if (lat && lng) {
+      locInsert.latitude = lat
+      locInsert.longitude = lng
+    }
+    const { data: newLoc, error: locError } = await supabase
+      .from('locations')
+      .insert([locInsert])
+      .select('location_id')
+      .single()
+    if (locError) return { error: locError.message }
+    locationId = newLoc.location_id
+  }
+
 
   // Get Category ID
   const { data: catData, error: catError } = await supabase
@@ -39,41 +67,47 @@ export async function createComplaint(formData: FormData) {
     .single()
 
   if (catError) {
-     return { error: `Category fetch error: ${catError.message}` }
+    return { error: `Category not found: ${catError.message}` }
   }
 
   // File upload logic (optional)
   const image = formData.get('image') as File | null
   let image_url = null
   if (image && image.size > 0) {
-    // Generate a unique filename
     const fileExt = image.name.split('.').pop()
-    const filename = `${Math.random()}.${fileExt}`
+    const filename = `${Date.now()}_${Math.random().toString(36).slice(2)}.${fileExt}`
     const { data: imgData, error: imgError } = await supabase
       .storage
-      .from('complaints_media') // Make sure this bucket is created in supabase
+      .from('complaints_media')
       .upload(`${user.id}/${filename}`, image)
-      
+
     if (imgError) {
-      console.error(imgError)
-      // gracefully continue without image or handle error
-    } else {
+      console.error('Image upload error:', imgError)
+      // Continue without image
+    } else if (imgData) {
       const { data: urlData } = supabase.storage.from('complaints_media').getPublicUrl(`${user.id}/${filename}`)
       image_url = urlData.publicUrl
     }
   }
 
   // Insert complaint
+  const insertPayload: Record<string, unknown> = {
+    category_ref: catData.category_id,
+    location_ref: locationId,
+    description,
+    priority,
+    state,
+    created_by: user.id,
+    image_url
+  }
+
+  if (tagged_officers.length > 0) {
+    insertPayload.tagged_officers = tagged_officers
+  }
+
   const { error: compError } = await supabase
     .from('complaints')
-    .insert([{
-       category_ref: catData.category_id,
-       location_ref: locationData.location_id,
-       description,
-       priority,
-       created_by: user.id,
-       image_url
-    }])
+    .insert([insertPayload])
 
   if (compError) {
     return { error: compError.message }
@@ -89,8 +123,14 @@ export async function updateComplaintStatus(formData: FormData) {
   if (!user) return { error: 'Not authenticated' }
 
   // Check if user is officer
-  const { data: officer } = await supabase.from('officers').select('officer_id').eq('user_id', user.id).single()
+  const { data: officer } = await supabase
+    .from('officers')
+    .select('officer_id, is_approved')
+    .eq('user_id', user.id)
+    .single()
+
   if (!officer) return { error: 'Unauthorized: Officer access required' }
+  if (!officer.is_approved) return { error: 'Your account is pending approval' }
 
   const complaint_id = formData.get('complaint_id') as string
   const status = formData.get('status') as string
@@ -112,7 +152,7 @@ export async function updateComplaintStatus(formData: FormData) {
         update_text,
         updated_by: officer.officer_id
       }])
-    
+
     if (statusError) return { error: statusError.message }
   }
 
