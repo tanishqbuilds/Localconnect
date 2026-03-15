@@ -3,24 +3,50 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function toggleFollow(targetId: string, currentlyFollowing: boolean) {
+export async function updateProfilePhoto(photoUrl: string) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authenticated' }
 
-  if (targetId === user.id) return { error: 'Cannot follow yourself' }
+  if (!user) throw new Error('Unauthorized')
 
-  if (currentlyFollowing) {
-    const { error } = await supabase
-      .from('follows')
-      .delete()
-      .match({ follower: user.id, following: targetId })
-    if (error) return { error: error.message }
-  } else {
-    const { error } = await supabase
-      .from('follows')
-      .insert([{ follower: user.id, following: targetId }])
-    if (error) return { error: error.message }
+  const { error } = await supabase
+    .from('users')
+    .update({ photo_url: photoUrl })
+    .eq('user_id', user.id)
+
+  if (error) {
+    console.error('Update profile photo error:', error)
+    throw new Error('Failed to update profile photo')
+  }
+
+  revalidatePath('/profile')
+  revalidatePath('/dashboard/citizen')
+  revalidatePath('/dashboard/officer')
+  return { success: true }
+}
+
+export async function updateProfileDetails(formData: FormData) {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('Unauthorized')
+
+  const name = formData.get('name') as string
+  const phone = formData.get('phone') as string
+  const city = formData.get('city') as string
+
+  const { error } = await supabase
+    .from('users')
+    .update({ 
+      name, 
+      phone,
+      city
+    })
+    .eq('user_id', user.id)
+
+  if (error) {
+    console.error('Update profile details error:', error)
+    throw new Error('Failed to update profile details')
   }
 
   revalidatePath('/profile')

@@ -1,18 +1,9 @@
--- ==============================================================================
--- ADD LATITUDE/LONGITUDE TO LOCATIONS FOR MAP & SPATIAL QUERIES
--- ==============================================================================
-
--- These columns support the Haversine spatial query already documented in
--- README_ADBMS.md under "Spatial Database Features"
 ALTER TABLE locations ADD COLUMN IF NOT EXISTS latitude NUMERIC(10, 7);
 ALTER TABLE locations ADD COLUMN IF NOT EXISTS longitude NUMERIC(10, 7);
 
--- Create a spatial index on coordinates for faster radius queries
 CREATE INDEX IF NOT EXISTS idx_locations_coordinates ON locations (latitude, longitude)
 WHERE latitude IS NOT NULL AND longitude IS NOT NULL;
 
--- Update the existing calculate_distance() function with Haversine formula
--- (creates if not already exists from adbms migration)
 CREATE OR REPLACE FUNCTION calculate_distance(
   lat1 NUMERIC, lon1 NUMERIC,
   lat2 NUMERIC, lon2 NUMERIC

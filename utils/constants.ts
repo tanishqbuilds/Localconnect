@@ -22,6 +22,8 @@ export const MAHARASHTRA_CITIES = [
   'Alibaug',
 ] as const
 
+export const CITIES = MAHARASHTRA_CITIES
+
 export type MaharashtraCity = typeof MAHARASHTRA_CITIES[number]
 
 // Officer Types / Roles
@@ -59,6 +61,65 @@ export const COMPLAINT_CATEGORIES = [
   { value: 'fire hazard', label: 'Fire Hazard', relevantOfficers: ['Fire Brigade', 'Municipal Worker'] },
 ] as const
 
+// Help Request Categories
+export const HELP_CATEGORIES = [
+  { value: 'blood donation', label: '🩸 Blood Donation' },
+  { value: 'emergency', label: '🚨 Emergency Assistance' },
+  { value: 'lost pet', label: '🐕 Lost Pet' },
+  { value: 'volunteer', label: '🤝 Volunteer Needed' },
+  { value: 'grocery', label: '🛒 Grocery / Essentials' },
+  { value: 'medical', label: '💊 Medical Support' },
+] as const
+
+// Event Categories
+export const EVENT_CATEGORIES = [
+  { value: 'cleanup', label: '🧹 Cleanup Drive' },
+  { value: 'tree plantation', label: '🌱 Tree Plantation' },
+  { value: 'cultural', label: '🎭 Cultural Festival' },
+  { value: 'blood camp', label: '💉 Blood Donation Camp' },
+  { value: 'workshop', label: '👨‍🏫 Skill Workshop' },
+  { value: 'sports', label: '⚽ Sports Event' },
+] as const
+
+// Business Categories
+export const BUSINESS_CATEGORIES = [
+  { value: 'plumber', label: '🔧 Plumber' },
+  { value: 'electrician', label: '⚡ Electrician' },
+  { value: 'doctor', label: '👨‍⚕️ Doctor' },
+  { value: 'pharmacy', label: '💊 Pharmacy' },
+  { value: 'grocery', label: '🛒 Grocery Store' },
+  { value: 'mechanic', label: '🚗 Mechanic' },
+  { value: 'restaurant', label: '🍕 Restaurant' },
+] as const
+
+// Resource Categories
+export const RESOURCE_CATEGORIES = [
+  { value: 'tools', label: '🛠️ Tools & Equipment' },
+  { value: 'books', label: '📚 Books' },
+  { value: 'carpool', label: '🚗 Carpool' },
+  { value: 'knowledge', label: '🧠 Knowledge Sharing' },
+  { value: 'furniture', label: '🛋️ Furniture' },
+] as const
+
+// Proposal Categories
+export const PROPOSAL_CATEGORIES = [
+  { value: 'infrastructure', label: '🏗️ Infrastructure' },
+  { value: 'parks', label: '🌳 Parks & Greenery' },
+  { value: 'safety', label: '🛡️ Public Safety' },
+  { value: 'lighting', label: '💡 Street Lighting' },
+  { value: 'drainage', label: '🌉 Drainage & Sewage' },
+] as const
+
+// Lost & Found Categories
+export const LOST_FOUND_CATEGORIES = [
+  { value: 'electronics', label: '📱 Electronics' },
+  { value: 'pets', label: '🐈 Pets' },
+  { value: 'documents', label: '📄 Documents' },
+  { value: 'wallet', label: '👛 Wallet / Purse' },
+  { value: 'keys', label: '🔑 Keys' },
+  { value: 'others', label: '📦 Others' },
+] as const
+
 // Color map for officer badges
 export const OFFICER_TYPE_COLORS: Record<string, { bg: string; text: string; ring: string }> = {
   'Police':                { bg: 'bg-blue-50',   text: 'text-blue-700',   ring: 'ring-blue-600/20' },
@@ -72,3 +133,4 @@ export const OFFICER_TYPE_COLORS: Record<string, { bg: string; text: string; rin
   'Water Supply Officer':  { bg: 'bg-cyan-50',   text: 'text-cyan-700',   ring: 'ring-cyan-600/20' },
   'Revenue Officer':       { bg: 'bg-slate-100', text: 'text-slate-700',  ring: 'ring-slate-600/20' },
 }
+

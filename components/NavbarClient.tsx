@@ -16,7 +16,7 @@ const MOB_DEFAULT = `${MOB_BASE} text-slate-700 hover:bg-primary-50 hover:text-p
 const MOB_ACTIVE = `${MOB_BASE} text-primary-700 bg-primary-50 border-primary-600`
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function NavbarClient({ user, role }: { user: any; role: string | null }) {
+export default function NavbarClient({ user, role, reputation }: { user: any; role: string | null; reputation: number }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
   const pathname = usePathname()
@@ -67,10 +67,16 @@ export default function NavbarClient({ user, role }: { user: any; role: string |
                   Dashboard
                 </ActiveLink>
                 <ActiveLink
+                  href="/explore"
+                  className={isActive('/explore') ? NAV_ACTIVE : NAV_DEFAULT}
+                >
+                  Explore Hub
+                </ActiveLink>
+                <ActiveLink
                   href="/feed"
                   className={isActive('/feed') ? NAV_ACTIVE : NAV_DEFAULT}
                 >
-                  Community Feed
+                  News Feed
                 </ActiveLink>
                 <ActiveLink
                   href="/officers"
@@ -92,6 +98,14 @@ export default function NavbarClient({ user, role }: { user: any; role: string |
             <div className="flex items-center gap-2 ml-4 pl-4 border-l border-slate-200">
               {user ? (
                 <>
+                  {/* Professional Reputation Badge */}
+                  <div className="hidden lg:flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-full mr-2">
+                    <div className="bg-amber-100 p-1 rounded-full">
+                       <Shield className="w-3 h-3 text-amber-600 fill-amber-600" />
+                    </div>
+                    <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">{reputation} CP</span>
+                  </div>
+
                   <ActiveLink
                     href="/profile"
                     className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-primary-600 px-2 py-1.5 rounded-lg hover:bg-slate-50 active:scale-95 transition-all"
@@ -148,6 +162,9 @@ export default function NavbarClient({ user, role }: { user: any; role: string |
               <>
                 <ActiveLink href={`/dashboard/${role}`} className={isActive(`/dashboard/${role}`) ? MOB_ACTIVE : MOB_DEFAULT} onClick={closeMobileMenu}>
                   Dashboard
+                </ActiveLink>
+                <ActiveLink href="/explore" className={isActive('/explore') ? MOB_ACTIVE : MOB_DEFAULT} onClick={closeMobileMenu}>
+                  Explore Hub
                 </ActiveLink>
                 <ActiveLink href="/feed" className={isActive('/feed') ? MOB_ACTIVE : MOB_DEFAULT} onClick={closeMobileMenu}>
                   Community Feed
