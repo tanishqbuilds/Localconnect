@@ -46,8 +46,7 @@ export default function LocalityMapWrapper({ complaints, userLat, userLng, radiu
             Local Issues Map — {city}
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            {totalCount} civic issues in your locality ·
-            <span className="text-indigo-600 ml-1">Data partitioned to your city only</span>
+            {totalCount} civic issues in your locality
           </p>
         </div>
         {complaints.length === 0 && totalCount > 0 && (

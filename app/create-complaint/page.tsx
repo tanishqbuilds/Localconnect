@@ -128,15 +128,8 @@ export default function CreateComplaintPage() {
         <div className="mb-8 border-b border-gray-100 pb-6">
           <h1 className="text-2xl font-bold leading-7 text-slate-900">Report a Civic Issue</h1>
           <p className="mt-1.5 text-sm leading-6 text-slate-500">
-            Your complaint will be routed to officers in <strong>your locality only</strong> — powered by GPS-based horizontal data partitioning.
+            Your complaint will be routed to officers in <strong>your locality only</strong>.
           </p>
-          {/* Fragmentation explanation badge */}
-          <div className="mt-3 inline-flex items-center gap-2 rounded-lg bg-indigo-50 border border-indigo-200 px-3 py-1.5">
-            <span className="text-indigo-600 text-xs">🗄️</span>
-            <span className="text-xs font-medium text-indigo-700">
-              ADBMS: Horizontal Fragmentation — data is partitioned by your geographic locality
-            </span>
-          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">

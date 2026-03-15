@@ -24,7 +24,7 @@ export default async function CitizenDashboard() {
 
   const userCity = userProfile?.city || user.user_metadata?.city
 
-  // Fetch complaints ONLY from user's city (Horizontal Fragmentation)
+  // Fetch complaints ONLY from user's city
   const complaintsQuery = supabase
     .from('complaints')
     .select(`
@@ -38,7 +38,7 @@ export default async function CitizenDashboard() {
   const { data: myComplaints, error } = await complaintsQuery
     .eq('created_by', user.id)
 
-  // Community complaints in my city zone — Horizontal Fragmentation
+  // Community complaints in my city zone
   let communityComplaints: typeof myComplaints = []
   if (userCity) {
     const { data: cityComplaints } = await supabase
@@ -110,11 +110,7 @@ export default async function CitizenDashboard() {
               </span>
             )}
           </div>
-          {userCity && (
-            <div className="mt-1 text-xs text-indigo-600 flex items-center gap-1">
-              🗄️ Showing data partitioned to your locality: <strong>{userCity}</strong> (Horizontal Fragmentation)
-            </div>
-          )}
+
         </div>
         <div className="mt-4 sm:mt-0 flex gap-3">
           <Link href="/officers"
