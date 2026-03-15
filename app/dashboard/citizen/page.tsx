@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { OFFICER_TYPE_COLORS } from '@/utils/constants'
 import LocalityMapWrapper from '@/components/LocalityMapWrapper'
+import RealtimeSubscriber from '@/components/RealtimeSubscriber'
 
 export default async function CitizenDashboard() {
   const supabase = createClient()
@@ -96,24 +97,23 @@ export default async function CitizenDashboard() {
     })
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-
-      {/* Header */}
-      <div className="sm:flex sm:items-center sm:justify-between">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <RealtimeSubscriber tables={['complaints']} />
+      <div className="sm:flex sm:items-center sm:justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold leading-7 text-slate-900 sm:text-3xl">My Dashboard</h1>
-          <p className="mt-1 text-sm text-slate-500 flex items-center gap-2 flex-wrap">
+          <div className="mt-1 text-sm text-slate-500 flex items-center gap-2 flex-wrap">
             Welcome, <span className="font-semibold text-slate-700">{user.user_metadata?.name || userProfile?.name || 'Citizen'}</span>
             {userCity && (
               <span className="inline-flex items-center gap-1 bg-primary-50 text-primary-700 border border-primary-200 rounded-full px-2.5 py-0.5 text-xs font-medium">
                 <MapPin className="w-3 h-3" /> {userCity}, Maharashtra
               </span>
             )}
-          </p>
+          </div>
           {userCity && (
-            <p className="mt-1 text-xs text-indigo-600 flex items-center gap-1">
+            <div className="mt-1 text-xs text-indigo-600 flex items-center gap-1">
               🗄️ Showing data partitioned to your locality: <strong>{userCity}</strong> (Horizontal Fragmentation)
-            </p>
+            </div>
           )}
         </div>
         <div className="mt-4 sm:mt-0 flex gap-3">

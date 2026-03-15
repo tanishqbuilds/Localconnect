@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { Users, UserCheck, ClipboardList, MessageSquare, AlertTriangle, CheckCircle, Clock, TrendingUp, FileText } from 'lucide-react'
 import Link from 'next/link'
+import RealtimeSubscriber from '@/components/RealtimeSubscriber'
 
 export default async function AdminDashboard() {
   const supabase = createClient()
@@ -56,12 +57,14 @@ export default async function AdminDashboard() {
 
   return (
     <div className="px-6 py-8 max-w-7xl mx-auto">
+      <RealtimeSubscriber tables={['complaints', 'officers', 'users', 'posts', 'comments']} />
+      
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Dashboard Overview</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <div className="mt-1 text-sm text-slate-500">
           Welcome back, {user.user_metadata?.name || 'Admin'}. Here's what's happening on LocalConnect.
-        </p>
+        </div>
       </div>
 
       {/* Main Stat Cards */}

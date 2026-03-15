@@ -23,7 +23,11 @@ export async function login(formData: FormData) {
   const role = userData?.user?.user_metadata?.role || 'citizen'
 
   revalidatePath('/', 'layout')
-  redirect(`/dashboard/${role}`)
+  if (role === 'admin') {
+    redirect('/admin')
+  } else {
+    redirect(`/dashboard/${role}`)
+  }
 }
 
 export async function signup(formData: FormData) {
@@ -73,7 +77,11 @@ export async function signup(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect(`/dashboard/${role}`)
+  if (role === 'admin') {
+    redirect('/admin')
+  } else {
+    redirect(`/dashboard/${role}`)
+  }
 }
 
 export async function logout() {

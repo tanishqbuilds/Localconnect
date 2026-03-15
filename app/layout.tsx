@@ -18,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="h-full">
-      <body className={`${inter.className} min-h-screen h-full flex flex-col bg-slate-50 text-slate-900`}>
+    <html lang="en" className="h-full" suppressHydrationWarning>
+      <body className={`${inter.className} min-h-screen h-full flex flex-col bg-slate-50 text-slate-900`} suppressHydrationWarning>
         {/* Top loading bar — shows during every page navigation */}
         <NextTopLoader
           color="#2563eb"

@@ -6,6 +6,7 @@ import {
   CheckCircle, AlertCircle, TrendingUp, Users, Tag, Star
 } from 'lucide-react'
 import { OFFICER_TYPE_COLORS } from '@/utils/constants'
+import RealtimeSubscriber from '@/components/RealtimeSubscriber'
 
 export default async function OfficerDashboard({
   searchParams,
@@ -36,6 +37,7 @@ export default async function OfficerDashboard({
   if (officer && !officer.is_approved) {
     return (
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <RealtimeSubscriber tables={['officers']} />
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-10">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-amber-100 mb-6">
             <Clock className="w-10 h-10 text-amber-600" />
@@ -124,8 +126,7 @@ export default async function OfficerDashboard({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-      {/* Header */}
+      <RealtimeSubscriber tables={['complaints']} />
       <div className="sm:flex sm:items-center sm:justify-between mb-8">
         <div className="flex items-start gap-4">
           <div className="p-3 rounded-xl bg-primary-600 shadow-lg shadow-primary-500/30">
@@ -134,9 +135,9 @@ export default async function OfficerDashboard({
           <div>
             <h1 className="text-2xl font-bold text-slate-900">Officer Command Center</h1>
             <div className="flex flex-wrap items-center gap-2 mt-1">
-              <p className="text-sm text-slate-500">
+              <div className="text-sm text-slate-500">
                 Welcome, <span className="font-semibold text-slate-700">{user.user_metadata?.name || 'Officer'}</span>
-              </p>
+              </div>
               {officer.officer_type && (
                 <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${officerColors.bg} ${officerColors.text} ${officerColors.ring}`}>
                   {officer.officer_type}
