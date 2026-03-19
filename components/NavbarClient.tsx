@@ -3,7 +3,7 @@
 import { useRouter, usePathname } from 'next/navigation'
 import { createClient } from '@/utils/supabase/client'
 import { useState } from 'react'
-import { LogOut, Menu, UserCircle, MapPin, Shield, X } from 'lucide-react'
+import { LogOut, Menu, UserCircle, MapPin, Shield, X, Database, Activity } from 'lucide-react'
 import toast from 'react-hot-toast'
 import ActiveLink from './ActiveLink'
 
@@ -83,6 +83,18 @@ export default function NavbarClient({ user, role, reputation }: { user: any; ro
                   className={`${isActive('/officers') ? NAV_ACTIVE : NAV_DEFAULT} flex items-center gap-1`}
                 >
                   <Shield className="w-3.5 h-3.5" /> Officers
+                </ActiveLink>
+                <ActiveLink
+                  href="/db-showcase"
+                  className={`${isActive('/db-showcase') ? NAV_ACTIVE : NAV_DEFAULT} flex items-center gap-1 text-indigo-600 font-semibold`}
+                >
+                  <Database className="w-3.5 h-3.5" /> DB Showcase
+                </ActiveLink>
+                <ActiveLink
+                  href="/db-live"
+                  className={`${isActive('/db-live') ? NAV_ACTIVE : NAV_DEFAULT} flex items-center gap-1 text-rose-500 font-semibold`}
+                >
+                  <Activity className="w-3.5 h-3.5" /> Live Monitor
                 </ActiveLink>
                 {role === 'citizen' && (
                   <ActiveLink
@@ -171,6 +183,12 @@ export default function NavbarClient({ user, role, reputation }: { user: any; ro
                 </ActiveLink>
                 <ActiveLink href="/officers" className={isActive('/officers') ? MOB_ACTIVE : MOB_DEFAULT} onClick={closeMobileMenu}>
                   Officers Directory
+                </ActiveLink>
+                <ActiveLink href="/db-showcase" className={`${isActive('/db-showcase') ? MOB_ACTIVE : MOB_DEFAULT} text-indigo-600 font-semibold`} onClick={closeMobileMenu}>
+                  DB Showcase
+                </ActiveLink>
+                <ActiveLink href="/db-live" className={`${isActive('/db-live') ? MOB_ACTIVE : MOB_DEFAULT} text-rose-500 font-semibold`} onClick={closeMobileMenu}>
+                  Live Monitor
                 </ActiveLink>
                 {role === 'citizen' && (
                   <ActiveLink href="/create-complaint" className={isActive('/create-complaint') ? MOB_ACTIVE : MOB_DEFAULT} onClick={closeMobileMenu}>
