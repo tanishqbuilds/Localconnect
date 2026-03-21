@@ -118,7 +118,7 @@ export default async function TransparencyPage() {
          <div className="bg-primary-600 rounded-[2.5rem] p-10 text-white shadow-xl shadow-primary-600/25">
             <h4 className="text-2xl font-black mb-4 leading-tight">Civic Engagement Insights</h4>
             <p className="text-primary-100 text-sm mb-8 leading-relaxed">
-               Locality engagement is up by 24% this quarter. Proposals related to "Green Energy" and "CCTV Infrastructure" are receiving the highest participation rates.
+               Locality engagement is up by 24% this quarter. Proposals related to &quot;Green Energy&quot; and &quot;CCTV Infrastructure&quot; are receiving the highest participation rates.
             </p>
             <div className="bg-white/10 rounded-2xl p-6 border border-white/10">
                <div className="flex items-center justify-between mb-4">

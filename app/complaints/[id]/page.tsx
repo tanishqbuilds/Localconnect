@@ -7,7 +7,9 @@ import { updateComplaintStatus } from '@/app/actions/complaints'
 import toast from 'react-hot-toast'
 import ClientFormRenderer from './ClientFormRenderer'
 
-export default async function ComplaintDetailsPage({ params }: { params: { id: string } }) {
+export default async function ComplaintDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -25,7 +27,7 @@ export default async function ComplaintDetailsPage({ params }: { params: { id: s
       created_by (name, email),
       assigned_officer (department, designation)
     `)
-    .eq('complaint_id', params.id)
+    .eq('complaint_id', id)
     .single()
 
   if (error || !complaint) {
@@ -45,7 +47,7 @@ export default async function ComplaintDetailsPage({ params }: { params: { id: s
        *,
        updated_by (department, designation, user_id)
     `)
-    .eq('complaint_ref', params.id)
+    .eq('complaint_ref', id)
     .order('update_date', { ascending: true })
 
   // Check if we are officers

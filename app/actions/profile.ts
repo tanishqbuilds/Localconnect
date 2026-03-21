@@ -52,3 +52,39 @@ export async function updateProfileDetails(formData: FormData) {
   revalidatePath('/profile')
   return { success: true }
 }
+
+export async function toggleFollow(followingId: string, currentStatus?: boolean) {
+  try {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) return { error: 'Unauthorized', success: false }
+
+    // Check if already following
+    const { data: existing } = await supabase
+      .from('follows')
+      .select('*')
+      .eq('follower', user.id)
+      .eq('following', followingId)
+      .single()
+
+    if (existing) {
+      // Unfollow
+      const { error } = await supabase.from('follows').delete().eq('follower', user.id).eq('following', followingId)
+      if (error) return { error: error.message, success: false }
+    } else {
+      // Follow
+      const { error } = await supabase.from('follows').insert({ follower: user.id, following: followingId })
+      if (error) return { error: error.message, success: false }
+    }
+
+
+    revalidatePath(`/profile/${followingId}`)
+    return { success: true, isFollowing: !existing, error: undefined as string | undefined }
+  } catch (err: any) {
+    return { error: err.message || 'An unexpected error occurred', success: false }
+  }
+}
+
+
+

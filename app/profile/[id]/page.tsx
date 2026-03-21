@@ -6,7 +6,8 @@ import {
   Briefcase, Globe, Mail
 } from 'lucide-react'
 
-export default async function PublicProfilePage({ params }: { params: { id: string } }) {
+export default async function PublicProfilePage({ params }: { params: Promise<{ id: string }> }) {
+
   const supabase = createClient()
   const { data: { user: currentUser } } = await supabase.auth.getUser()
 

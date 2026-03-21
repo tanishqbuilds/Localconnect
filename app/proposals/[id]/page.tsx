@@ -5,7 +5,9 @@ import { ArrowLeft, User, MapPin, Calendar, Vote, ThumbsUp, ThumbsDown, Info, Sh
 import { format } from 'date-fns'
 import { castVote } from '@/app/actions/proposals'
 
-export default async function ProposalDetailPage({ params }: { params: { id: string } }) {
+export default async function ProposalDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -17,7 +19,7 @@ export default async function ProposalDetailPage({ params }: { params: { id: str
       creator:created_by (name, reputation_score),
       votes:proposal_votes (user_ref, vote_type)
     `)
-    .eq('proposal_id', params.id)
+    .eq('proposal_id', id)
     .single()
 
   if (!proposal) notFound()

@@ -173,7 +173,7 @@ export default function DBShowcase() {
     if (!result) return (
       <div className="flex flex-col items-center justify-center p-12 text-zinc-500 border-2 border-dashed border-zinc-800 rounded-xl">
         <Activity className="w-12 h-12 mb-4 opacity-20" />
-        <p>Click "Run Query" to see live results from the database</p>
+        <p>Click &quot;Run Query&quot; to see live results from the database</p>
       </div>
     );
 

@@ -63,7 +63,7 @@ export default async function AdminDashboard() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Dashboard Overview</h1>
         <div className="mt-1 text-sm text-slate-500">
-          Welcome back, {user.user_metadata?.name || 'Admin'}. Here's what's happening on LocalConnect.
+          Welcome back, {user.user_metadata?.name || 'Admin'}. Here&apos;s what&apos;s happening on LocalConnect.
         </div>
       </div>
 
