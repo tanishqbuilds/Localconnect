@@ -84,12 +84,7 @@ export default function NavbarClient({ user, role, reputation }: { user: any; ro
                 >
                   <Shield className="w-3.5 h-3.5" /> Officers
                 </ActiveLink>
-                <ActiveLink
-                  href="/db-showcase"
-                  className={`${isActive('/db-showcase') ? NAV_ACTIVE : NAV_DEFAULT} flex items-center gap-1 text-indigo-600 font-semibold`}
-                >
-                  <Database className="w-3.5 h-3.5" /> DB Showcase
-                </ActiveLink>
+
                 <ActiveLink
                   href="/db-live"
                   className={`${isActive('/db-live') ? NAV_ACTIVE : NAV_DEFAULT} flex items-center gap-1 text-rose-500 font-semibold`}
@@ -184,9 +179,7 @@ export default function NavbarClient({ user, role, reputation }: { user: any; ro
                 <ActiveLink href="/officers" className={isActive('/officers') ? MOB_ACTIVE : MOB_DEFAULT} onClick={closeMobileMenu}>
                   Officers Directory
                 </ActiveLink>
-                <ActiveLink href="/db-showcase" className={`${isActive('/db-showcase') ? MOB_ACTIVE : MOB_DEFAULT} text-indigo-600 font-semibold`} onClick={closeMobileMenu}>
-                  DB Showcase
-                </ActiveLink>
+
                 <ActiveLink href="/db-live" className={`${isActive('/db-live') ? MOB_ACTIVE : MOB_DEFAULT} text-rose-500 font-semibold`} onClick={closeMobileMenu}>
                   Live Monitor
                 </ActiveLink>
