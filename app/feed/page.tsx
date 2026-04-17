@@ -136,7 +136,7 @@ export default async function CommunityFeedPage() {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[10px] font-bold text-primary-400 uppercase tracking-widest">OFFICIAL ALERT</span>
+                          <span className="text-[10px] font-bold text-primary-400 uppercase tracking-widest">NEIGHBORHOOD ALERT</span>
                           <span className="text-white/20 text-xs text-[10px]">•</span>
                           <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{formatDistanceToNow(new Date(item.created_at))} ago</span>
                         </div>

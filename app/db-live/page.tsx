@@ -70,22 +70,17 @@ export default function DBLive() {
   useEffect(() => {
     if (isPaused) return;
 
-    const channel = supabase
-      .channel('schema-db-changes')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public' },
-        (payload) => {
+    const handlePayload = (payload: any) => {
           console.log('Change received!', payload);
           
-          const sql = generateSqlTemplate(payload);
-          const optimization = getOptimizationInfo(payload);
+          const sql = payload.isIntercepted ? payload.sqlTemplate : generateSqlTemplate(payload);
+          const optimization = payload.isIntercepted ? payload.stats : getOptimizationInfo(payload);
           
           const newEvent: DbEvent = {
             id: crypto.randomUUID(),
             table: payload.table,
-            action: payload.eventType as any,
-            timestamp: new Date().toLocaleTimeString(),
+            action: payload.eventType as any || payload.action,
+            timestamp: payload.timestamp || new Date().toLocaleTimeString(),
             new: payload.new,
             old: payload.old,
             sqlTemplate: sql,
@@ -98,9 +93,13 @@ export default function DBLive() {
             return updated;
           });
           
-          setHistory(prev => [newEvent, ...prev].slice(0, 100)); // Log history separately
-        }
-      )
+          setHistory(prev => [newEvent, ...prev].slice(0, 100));
+    }
+
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on('postgres_changes', { event: '*', schema: 'public' }, handlePayload)
+      .on('broadcast', { event: 'postgres_changes' }, (response) => handlePayload(response.payload))
       .subscribe();
 
     return () => {

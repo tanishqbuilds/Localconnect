@@ -18,9 +18,10 @@ export async function broadcastAlert(formData: FormData) {
   const { error } = await supabase
     .from('community_alerts')
     .insert({
+      author_ref: user.id,
       title,
       content,
-      alert_level: level,
+      level,
       broadcast_city: city,
       expires_at: new Date(Date.now() + hours * 60 * 60 * 1000).toISOString()
     })

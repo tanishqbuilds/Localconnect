@@ -6,13 +6,13 @@ import {
 } from 'lucide-react'
 
 const MODULES = [
-  { 
-    title: 'Civic Voting', 
-    desc: 'Propose and vote on local infrastructure projects.', 
-    href: '/proposals', 
-    icon: Vote, 
-    color: 'bg-primary-100 text-primary-600' 
-  },
+  // { 
+  //   title: 'Civic Voting', 
+  //   desc: 'Propose and vote on local infrastructure projects.', 
+  //   href: '/proposals', 
+  //   icon: Vote, 
+  //   color: 'bg-primary-100 text-primary-600' 
+  // },
   { 
     title: 'Help Network', 
     desc: 'Request or offer emergency aid and local support.', 
@@ -34,13 +34,13 @@ const MODULES = [
     icon: Store, 
     color: 'bg-indigo-100 text-indigo-600' 
   },
-  { 
-    title: 'Safety Reports', 
-    desc: 'Report broken lights, hazards, and concerns.', 
-    href: '/safety', 
-    icon: ShieldAlert, 
-    color: 'bg-orange-100 text-orange-600' 
-  },
+  // { 
+  //   title: 'Safety Reports', 
+  //   desc: 'Report broken lights, hazards, and concerns.', 
+  //   href: '/safety', 
+  //   icon: ShieldAlert, 
+  //   color: 'bg-orange-100 text-orange-600' 
+  // },
   { 
     title: 'Neighborhood Alerts', 
     desc: 'Real-time broadcasts from authorities.', 
